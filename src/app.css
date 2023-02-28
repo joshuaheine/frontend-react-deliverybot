@@ -2,14 +2,21 @@
     background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px; 
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 25px;
+    border-radius: 25px;    
+}
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+    .App button {
+        padding: 8px 16px;
+        font-size: 12px; 
+    }
 }
 
 .App button:disabled {
