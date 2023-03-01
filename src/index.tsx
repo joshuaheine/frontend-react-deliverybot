@@ -41,9 +41,6 @@ function App() {
 
     function playSound() {
         const audio = new Audio(buttonSound);
-        audio.addEventListener('ended', () => {
-            console.log('Audio ended');
-        });
         audio.play();
     }
 
@@ -51,7 +48,7 @@ function App() {
         await axios.post('/api/lid', { lid });
         const { data } = await axios.get('/api/status');
         setRobotStatus(data);
-        if (lid === 'close' && robotStatus?.position?.x !== 0 && robotStatus?.position?.y !== 0 && robotStatus?.position?.theta !== 0) {
+        if (lid === 'close' && robotStatus?.position.x !== 0 && robotStatus?.position.y !== 0 && robotStatus?.position.theta !== 0) {
             await axios.post('/api/nav/goal', { waypoint: 'ADESqX9j_h6ujP4n'});
             const { data: status } = await axios.get('/api/status');
             setRobotStatus(status);
