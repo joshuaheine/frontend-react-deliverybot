@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
 import './app.css';
+//@ts-ignore  
+import buttonSound from "./assets/button-sound.wav";
 
 interface Waypoints {
     [key: string]: {
@@ -36,6 +38,14 @@ function App() {
         };
         fetchData();
     }, []);
+
+    function playSound() {
+        const audio = new Audio(buttonSound);
+        audio.addEventListener('ended', () => {
+            console.log('Audio ended');
+        });
+        audio.play();
+    }
 
     const handleLidChange = async (lid: string) => {
         await axios.post('/api/lid', { lid });
@@ -82,10 +92,11 @@ function App() {
             {waypoints && (
                 <div>
                     <h2>Waypoints</h2>
-                    <ul>
+                    <ul style={{ listStyle: 'none', padding: 0 }}>
                         {Object.keys(waypoints).map((waypointId) => (
                             <li key={waypointId}>
-                                <button onClick={() => handleWaypointSelect(waypointId)}>
+                                <button disabled={!robotStatus?.position || (robotStatus.position.x === 0 && robotStatus.position.y === 0 && robotStatus.position.theta === 0)} 
+                                onClick={() => {handleWaypointSelect(waypointId);playSound();}}>
                                     {waypoints[waypointId].name}
                                 </button>
                             </li>
@@ -97,16 +108,16 @@ function App() {
             {selectedWaypoint && (
                 <div>
                     <h2>Cancel On-Going Navigation</h2>
-                    <button onClick={handleNavigationCancel}>Cancel</button>
+                    <button onClick={ () => {handleNavigationCancel();playSound();}}>Cancel</button>
                 </div>
             )}
 
             <div>
                 <h2>Lid Control</h2>
-                <button disabled={robotStatus && robotStatus.lid === 'open'} onClick={() => handleLidChange('open')}>
+                <button disabled={robotStatus && robotStatus.lid === 'open'} onClick={() => {handleLidChange('open');playSound();}}>
                     Open Lid
                 </button>
-                <button disabled={robotStatus && robotStatus.lid === 'close'} onClick={() => handleLidChange('close')}>
+                <button disabled={robotStatus && robotStatus.lid === 'close'} onClick={() => {handleLidChange('close');playSound();}}>
                     Close Lid
                 </button>
             </div>
